@@ -1,0 +1,5 @@
+---
+# defaults file for crc
+artifacts: artifacts
+url: https://cloud.redhat.com/openshift/install/crc/installer-provisioned
+crc: ~/bin/crc

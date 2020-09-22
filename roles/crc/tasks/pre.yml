@@ -1,0 +1,14 @@
+---
+- name: look for required files in artifacts
+  find:
+    paths: "{{ artifacts }}"
+    patterns:
+      - crc-linux-amd64.tar.xz
+      - pull-secret
+  register: find_artifacts
+
+- name: show artifacts
+  fail:
+    msg: "Download pull-secret & crc-linux-amd64.tar.xz from {{ url }} and save them in in {{ artifacts }}"
+  when: find_artifacts.matched != 2
+

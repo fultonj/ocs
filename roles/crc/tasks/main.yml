@@ -1,0 +1,4 @@
+---
+- name: ensure we have prerequisites
+  include_tasks: pre.yml
+  tags: install

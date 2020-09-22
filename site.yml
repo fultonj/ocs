@@ -1,0 +1,6 @@
+---
+- name: Configure crc
+  gather_facts: false
+  hosts: localhost
+  roles:
+    - role: crc
