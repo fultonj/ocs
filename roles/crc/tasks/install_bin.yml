@@ -1,0 +1,22 @@
+---
+- name: Extract artifacts/crc-linux-amd64.tar.xz into /tmp
+  unarchive:
+    src: "{{ artifacts }}/crc-linux-amd64.tar.xz"
+    dest: /tmp/
+
+- name: Move crc binary from /tmp to desired install directory
+  shell: "mv /tmp/crc-linux-*/crc {{ crc }}"
+
+- name: Delete crc command
+  file:
+    path: "/tmp/crc-linux-*/"
+    state: absent
+
+- name: Get crc version
+  command: "{{ crc }} version"
+  register: crc_version
+  ignore_errors: yes
+
+- name: Show installed crc version
+  debug:
+    msg: "{{ crc_version.stdout }}"

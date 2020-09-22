@@ -1,0 +1,20 @@
+---
+- name: Get crc version
+  command: "{{ crc }} version"
+  register: crc_version
+
+- name: Show installed crc version
+  debug:
+    msg: "Setting up crc machine for {{ crc_version.stdout }}"
+
+- name: crc setup
+  command: "{{ crc }} setup"
+
+- name: crc config set memory
+  command: "{{ crc }} config set memory {{ crc_memory }}"
+
+- name: crc start
+  command: "{{ crc }} start -p {{ artifacts}}/pull-secret"
+
+- name: crc status
+  command: "{{ crc }} status"

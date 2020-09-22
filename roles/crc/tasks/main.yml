@@ -2,3 +2,27 @@
 - name: ensure we have prerequisites
   include_tasks: pre.yml
   tags: install
+
+- name: check if crc is installed
+  command: "{{ crc }} version"
+  register: crc_version
+  ignore_errors: yes
+  tags: delete
+
+- name: show
+  include_tasks: delete.yml
+  when: crc_version.rc == 0
+  tags: delete
+
+- name: install crc command
+  include_tasks: install_bin.yml
+  when: reinstall_bin
+  tags: install
+
+- name: install new crc machine
+  include_tasks: install_crc.yml
+  tags: install
+  
+- name: get env info for crc machine
+  include_tasks: env.yml
+  tags: env

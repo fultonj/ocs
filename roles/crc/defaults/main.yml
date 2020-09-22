@@ -1,5 +1,11 @@
 ---
 # defaults file for crc
+delete_cache: false
+reinstall_bin: false
+target_output: shiftrc
 artifacts: artifacts
 url: https://cloud.redhat.com/openshift/install/crc/installer-provisioned
+api: https://api.crc.testing:6443
 crc: ~/bin/crc
+cache_dir: ~/.crc
+crc_memory: 15360

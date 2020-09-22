@@ -1,0 +1,21 @@
+---
+- name: Show version to be removed
+  debug:
+    msg: "Removing {{ crc_version.stdout }}"
+
+- name: Delete the existing CodeReady Containers virtual machine
+  shell: "{{ crc }} delete -f"
+  register: crc_delete
+  tags: crc_delete
+  ignore_errors: true
+
+- name: Keep crc cache
+  debug:
+    msg: "Not deleting {{ cache_dir }} cache dir (use delete_cache=true to delete)"
+  when: not delete_cache
+  
+- name: Delete crc command
+  file:
+    path: "{{ crc }}"
+    state: absent
+  when: reinstall_bin

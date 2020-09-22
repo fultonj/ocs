@@ -1,0 +1,4 @@
+# point browser at http://console-openshift-console.apps-crc.testing/
+{{ oc_env }}
+alias ocdev="oc login -u developer -p developer {{ api }}"
+alias ocadm="oc login -u kubeadmin -p {{ kubeadmin_password }} {{ api }}"
