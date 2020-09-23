@@ -1,0 +1,26 @@
+---
+# tasks file for ocs
+- name: Ensure we have disks attached to use as OSDs
+  include_tasks: disks.yml
+  tags: disks
+
+- name: get nodes
+  k8s_info:
+    kubeconfig: "{{ kubeconfig }}"
+    api_version: v1
+    kind: Node
+  register: get_node
+
+- name: set node facts
+  set_fact:
+    node_name: "{{ get_node.resources[0].metadata.name }}"
+    node_labels: "{{ get_node.resources[0].metadata.labels }}"
+
+- name: Label node to be able to deploy OCS pods
+  shell: "oc label nodes {{ node_name }} {{ item.key }}={{ item.value }}"
+  when: item.key not in node_labels.keys()
+  loop:
+    - { key: "cluster.ocs.openshift.io/openshift-storage", value: "''"}
+    - { key: "topology.rook.io/rack", value: "rack0" }
+
+# todo: install the local storage operator

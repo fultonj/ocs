@@ -3,4 +3,5 @@
   gather_facts: false
   hosts: localhost
   roles:
-    - role: crc
+    #- role: crc
+    - role: ocs

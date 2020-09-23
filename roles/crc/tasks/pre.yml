@@ -12,3 +12,11 @@
     msg: "Download pull-secret & crc-linux-amd64.tar.xz from {{ url }} and save them in in {{ artifacts }}"
   when: find_artifacts.matched != 2
 
+- name: Ensure we have necessary RPMs
+  dnf:
+    name: NetworkManager # python-kubernetes
+    state: latest
+
+- name: Ensure we have necessary pip modules
+  pip:
+    name: openshift

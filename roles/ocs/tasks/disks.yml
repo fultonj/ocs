@@ -1,0 +1,34 @@
+---
+
+- name: look for disk
+  find:
+    paths: "{{ crc_machine_path }}"
+    patterns:
+      - "disk-{{ disk_size }}"
+  register: find_disk
+
+- name: set fact disk_path
+  set_fact:
+    disk_path: "{{ crc_machine_path | expanduser }}/disk-{{ disk_size }}"
+  
+- name: create disk
+  shell: "qemu-img create -f raw {{ disk_path }} {{ disk_size }}"
+  when: find_disk.matched == 0
+
+- name: get info about vm
+  virt:
+    name: "{{ crc_vm_name }}"
+    command: 'get_xml'
+  register: vm_xml
+
+- name: count disks attached to crc_vm
+  xml:
+    xmlstring: "{{ vm_xml.get_xml }}"
+    xpath: '/devices/disk'
+    count: yes
+  register: disk_count
+
+- name: attach new disk if it is not attached
+  become: true
+  shell: "virsh attach-disk {{ crc_vm_name }} {{ disk_path }} {{ disk_name }} --cache none"
+  when: disk_count.count == 1

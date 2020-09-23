@@ -1,0 +1,7 @@
+---
+# defaults file for ocs
+kubeconfig: ~/.crc/machines/crc/kubeconfig
+crc_vm_name: crc
+crc_machine_path: ~/.crc/machines/crc
+disk_size: 100G
+disk_name: vdb
