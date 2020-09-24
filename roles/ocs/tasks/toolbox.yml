@@ -1,0 +1,24 @@
+---
+- name: set toolbox_patch fact 
+  set_fact:
+    toolbox_patch: "{{ lookup('file', '../files/ceph_toolbox_pod_patch.json') | from_json }}"
+  tags: toolbox
+
+- name: deploy ceph toolbox pod
+  shell: "{{ oc }} patch OCSInitialization ocsinit -n openshift-storage --type json --patch '{{ toolbox_patch}}'"
+  tags: toolbox
+
+- name: Get rook-ceph-tools
+  k8s_info:
+    kubeconfig: "{{ kubeconfig }}"
+    api_version: v1
+    kind: Pod
+    label_selectors:
+      - app = rook-ceph-tools
+  register: get_pod
+  tags: toolbox
+
+- name: set toolbox fact
+  set_fact:
+    toolbox: "{{ get_pod.resources[0].metadata.name }}"
+  tags: toolbox

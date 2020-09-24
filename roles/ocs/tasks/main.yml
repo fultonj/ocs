@@ -1,26 +1,35 @@
 ---
 # tasks file for ocs
+- name: Ensure we have prerequisites
+  include_tasks: pre.yml
+  tags: always
+
+- name: Authenticate for this session
+  shell: "{{ oc }} login -u kubeadmin -p {{ kubeadmin_password }} {{ api }}"
+  tags: always
+
 - name: Ensure we have disks attached to use as OSDs
   include_tasks: disks.yml
   tags: disks
 
-- name: get nodes
-  k8s_info:
-    kubeconfig: "{{ kubeconfig }}"
-    api_version: v1
-    kind: Node
-  register: get_node
+- name: Label node
+  include_tasks: node.yml
+  tags: node
 
-- name: set node facts
-  set_fact:
-    node_name: "{{ get_node.resources[0].metadata.name }}"
-    node_labels: "{{ get_node.resources[0].metadata.labels }}"
+- name: Deploy OCS resources
+  include_tasks: ocs.yml
+  tags: ocs
 
-- name: Label node to be able to deploy OCS pods
-  shell: "oc label nodes {{ node_name }} {{ item.key }}={{ item.value }}"
-  when: item.key not in node_labels.keys()
-  loop:
-    - { key: "cluster.ocs.openshift.io/openshift-storage", value: "''"}
-    - { key: "topology.rook.io/rack", value: "rack0" }
+- name: Deploy Ceph toolbox
+  include_tasks: toolbox.yml
+  tags: toolbox
 
-# todo: install the local storage operator
+- name: check ceph health
+  shell: "{{ oc }} rsh -n openshift-storage {{ toolbox }} ceph -s"
+  register: ceph_status
+  tags: toolbox
+
+- name: show ceph status
+  debug:
+    msg: "{{ ceph_status.stdout_lines }}"
+  tags: toolbox

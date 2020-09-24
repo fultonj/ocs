@@ -5,3 +5,7 @@ crc_vm_name: crc
 crc_machine_path: ~/.crc/machines/crc
 disk_size: 100G
 disk_name: vdb
+artifacts: artifacts
+oc: ~/.crc/bin/oc/oc
+cache_dir: ~/.crc
+api: https://api.crc.testing:6443

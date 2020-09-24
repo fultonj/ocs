@@ -1,0 +1,31 @@
+---
+- name: Set image_base64data fact
+  set_fact:
+    image_base64data: "{{ lookup('file', artifacts + '/image_base64data') }}"
+  tags: ocs
+
+- name: Genereate container_operator.yml file
+  template:
+    src: container_operator_catalog.j2
+    dest: /tmp/container_operator_catalog.yml
+  tags: ocs
+
+- name: Create nine k8s resources for OCS in the correct order
+  k8s:
+    kubeconfig: "{{ kubeconfig }}"
+    state: present
+    definition: "{{ lookup('file', item) | from_yaml }}"
+  loop: 
+    - '../files/local_operator_namespace.yml'
+    - '../files/local_operator_group.yml'
+    - '../files/local_operator_sub.yml'
+    - '../files/local_volume.yml'
+    - '../files/container_operator_namespace.yml'
+    - '../files/container_operator_group.yml'
+    - '/tmp/container_operator_catalog.yml'
+    - '../files/container_operator_sub.yml'
+    - '../files/storage_cluster.yml'
+  loop_control:
+    label: "Creating k8s resource: {{ item | basename | regex_replace('.yml')}}"
+    pause: 20
+  tags: ocs

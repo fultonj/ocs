@@ -1,0 +1,34 @@
+---
+- block:
+    - name: look for required file in artifacts
+      find:
+        paths: "{{ artifacts }}"
+        patterns:
+          - image_base64data
+      register: find_artifacts
+
+    - name: show missing artifact
+      fail:
+        msg: "The image_base64data file is missing from artifacts. This file used to identify an unsupported one-node OCS image."
+      when: find_artifacts.matched != 1
+
+    - name: find kubeadmin password file
+      find:
+        paths: "{{ cache_dir }}"
+        recurse: true
+        patterns:
+          - kubeadmin-password
+      register: kubeadmin_password_find
+
+    - name: set kubeadmin_password_file fact
+      set_fact:
+        kubeadmin_password_file: "{{ kubeadmin_password_find['files'][0]['path'] }}"
+
+    - name: set kubeadmin_password fact
+      set_fact:
+        kubeadmin_password: "{{ lookup('file', kubeadmin_password_file) }}"
+
+    - name: set kubeadmin_password fact
+      set_fact:
+        kubeadmin_password: "{{ lookup('file', kubeadmin_password_file) }}"
+  tags: always

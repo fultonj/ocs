@@ -16,6 +16,7 @@
   dnf:
     name: NetworkManager # python-kubernetes
     state: latest
+  become: true
 
 - name: Ensure we have necessary pip modules
   pip:

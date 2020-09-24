@@ -1,7 +1,7 @@
 ---
-- name: Configure crc
+- name: Configure CRC and OCS
   gather_facts: false
   hosts: localhost
   roles:
-    #- role: crc
+    - role: crc
     - role: ocs
