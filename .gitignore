@@ -132,3 +132,4 @@ dmypy.json
 artifacts
 inventory.ini
 shiftrc
+ceph.client.openstack.keyring
