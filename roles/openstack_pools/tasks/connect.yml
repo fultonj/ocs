@@ -1,0 +1,43 @@
+---
+- name: find kubeadmin password file
+  find:
+    paths: "{{ cache_dir }}"
+    recurse: true
+    patterns:
+      - kubeadmin-password
+  register: kubeadmin_password_find
+
+- name: set kubeadmin_password_file fact
+  set_fact:
+    kubeadmin_password_file: "{{ kubeadmin_password_find['files'][0]['path'] }}"
+
+- name: set kubeadmin_password fact
+  set_fact:
+    kubeadmin_password: "{{ lookup('file', kubeadmin_password_file) }}"
+
+- name: set kubeadmin_password fact
+  set_fact:
+    kubeadmin_password: "{{ lookup('file', kubeadmin_password_file) }}"
+
+
+- name: Authenticate for this session
+  shell: "{{ oc }} login -u kubeadmin -p {{ kubeadmin_password }} {{ api }}"
+
+- name: Get rook-ceph-tools
+  k8s_info:
+    kubeconfig: "{{ kubeconfig }}"
+    api_version: v1
+    kind: Pod
+    label_selectors:
+      - app = rook-ceph-tools
+  register: get_pod
+  tags: toolbox
+
+- name: set toolbox fact
+  set_fact:
+    toolbox: "{{ get_pod.resources[0].metadata.name }}"
+  tags: toolbox
+
+- name: set ceph_prompt
+  set_fact:
+    ceph_prompt: "{{ oc }} rsh -n openshift-storage {{ toolbox }}"

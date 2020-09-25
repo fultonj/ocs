@@ -1,0 +1,8 @@
+---
+# defaults file for openstack_pools
+
+cache_dir: ~/.crc
+oc: ~/.crc/bin/oc/oc
+kubeconfig: ~/.crc/machines/crc/kubeconfig
+api: https://api.crc.testing:6443
+target_output: ceph.client.openstack.keyring

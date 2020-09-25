@@ -5,3 +5,4 @@
   roles:
     - role: crc
     - role: ocs
+    - role: openstack_pools

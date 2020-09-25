@@ -1,0 +1,24 @@
+---
+# tasks file for openstack_pools
+
+- name: Connect to Ceph cluster
+  include_tasks: connect.yml
+
+- name: Create openstack pools
+  shell: "{{ ceph_prompt }} ceph osd pool create {{ item }} 16"
+  loop:
+    - vms
+    - volumes
+    - images
+
+- name: Create opensatck cephx key
+  shell: "{{ ceph_prompt }} ceph auth add client.openstack mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=vms, allow rwx pool=volumes, allow rwx pool=images'"
+
+- name: Get openstack cephx key
+  shell: "{{ ceph_prompt }} ceph auth get client.openstack"
+  register: ceph_auth_get
+
+- name: Write openstack cephx key to file
+  copy:
+    dest: "{{ target_output }}"
+    content: "{{ ceph_auth_get.stdout }}"

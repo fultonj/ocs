@@ -3,8 +3,8 @@
 Use [run.sh](run.sh) to do the following with Ansible roles
 
 - install code ready containers with [roles/crc](roles/crc)
-- install ocs [roles/ocs](roles/ocs)
-- create pools and cephx key on ocs (tbd)
+- install ocs with [roles/ocs](roles/ocs)
+- create pools and cephx key on ocs with [roles/openstack_pools](roles/openstack_pools)
 - create app in namespace which uses rbd from previous step (tbd)
 
 The goal is to get [openstack-k8s-operators](https://github.com/openstack-k8s-operators/dev-tools) using RBD from OCS.
