@@ -8,4 +8,9 @@ url: https://cloud.redhat.com/openshift/install/crc/installer-provisioned
 api: https://api.crc.testing:6443
 crc: ~/bin/crc
 cache_dir: ~/.crc
-crc_memory: 15360
+# my server
+crc_cpus: 16
+crc_memory: 61440
+# my laptop
+#crc_cpus: 4
+#crc_memory: 15360

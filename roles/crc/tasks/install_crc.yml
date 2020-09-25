@@ -13,6 +13,9 @@
 - name: crc config set memory
   command: "{{ crc }} config set memory {{ crc_memory }}"
 
+- name: crc config set cpus
+  command: "{{ crc }} config set cpus {{ crc_cpus }}"
+
 - name: crc start
   command: "{{ crc }} start -p {{ artifacts}}/pull-secret"
 
