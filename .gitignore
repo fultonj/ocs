@@ -133,3 +133,4 @@ artifacts
 inventory.ini
 shiftrc
 ceph.client.openstack.keyring
+ceph.conf

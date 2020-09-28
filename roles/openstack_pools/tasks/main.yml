@@ -20,5 +20,20 @@
 
 - name: Write openstack cephx key to file
   copy:
-    dest: "{{ target_output }}"
+    dest: "{{ cephx_output }}"
     content: "{{ ceph_auth_get.stdout }}"
+
+- name: Generate minimal ceph config
+  shell: "{{ ceph_prompt }} ceph config generate-minimal-conf"
+  register: ceph_config_get
+
+- name: Write ceph.conf file
+  copy:
+    dest: "{{ ceph_conf_output }}"
+    content: "{{ ceph_config_get.stdout }}"
+
+- name: Write client/keyring into ceph.conf file
+  lineinfile:
+    path: "{{ ceph_conf_output }}"
+    line: "[client]\nkeyring = ceph.client.openstack.keyring"
+    state: present
