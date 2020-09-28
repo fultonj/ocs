@@ -3,6 +3,7 @@
 Use [run.sh](run.sh) to do the following with Ansible roles
 
 - install code ready containers with [roles/crc](roles/crc)
+- verify crc works with [apps/sample](apps/sample)
 - install ocs with [roles/ocs](roles/ocs)
 - create pools and cephx key on ocs with [roles/openstack_pools](roles/openstack_pools)
 - create app in namespace which uses rbd from previous step (tbd)
