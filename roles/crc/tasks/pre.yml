@@ -26,3 +26,9 @@
   file:
     path: "{{ bin }}"
     state: directory
+
+- name: Install odo in bin directory
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/clients/odo/latest/odo-linux-amd64
+    dest: "{{ bin }}/odo"
+    mode: '0700'
