@@ -9,11 +9,11 @@ Use [run.sh](run.sh) to do the following with Ansible roles:
 Then place the files `ceph.client.openstack.keyring` and
 `ceph.conf`, created from the last step above, in a cloned copy of
 [this app](https://github.com/fultonj/pyapp) and follow the directions
-to deploy the app in its own project.
+to deploy the app in its own project (if you create the app from
+github, then you'll need to update it to include your cephx key and
+conf file).
 
-Commands to configure the `openshift-storage` project deployed in step
-2 above so that the [pyapp project](https://github.com/fultonj/pyapp)
-can access it need to be posted here.
+Follow the steps in [policy](policy) so the pyapp can access OCS.
 
 This should prove that you can deploy OCS and allow direct access to
 its Ceph pools via RBD to another project. It should then be possible

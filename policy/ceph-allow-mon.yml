@@ -1,0 +1,13 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: ceph-allow-mon
+spec:
+  podSelector:
+    matchLabels:
+      app: rook-ceph-mon
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: pyapp
