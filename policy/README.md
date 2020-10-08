@@ -41,8 +41,13 @@ networkpolicy.networking.k8s.io/ceph-allow-mon created
 The [pyapp will test it can connect to this port](https://github.com/fultonj/pyapp/commit/ac258a2a8f3faa52e9af3a21dea78ae4b6881e6d)
 to access the ceph mon service.
 
-## Expose ceph-osd service
+## Expose ceph-osd service?
 
-After an exchange with the Ceph Mon an RBD client uses the CRUSH map
-to directly interacts with the OSDs. Exposing the OSDs is still a work
-in progress.
+After an exchange with the Ceph Mon an RBD client uses the
+[cluster map](https://docs.ceph.com/en/latest/architecture/#cluster-map)
+to directly interact with the OSDs. The OSD map `ceph osd dump` will
+contain internal IPs that are only accessible in the openshift-storage
+namespace. Creating a service IP, even for every OSD, would require
+injecting those IPs into the OSD map which is a terrible idea. Instead
+if this is going to work we would need to give the clients direct
+access to the internal storage network.
